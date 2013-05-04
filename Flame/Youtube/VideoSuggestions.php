@@ -62,13 +62,15 @@ class VideoSuggestions extends UrlService
 	 */
 	public function getResult()
 	{
-		$response = json_decode($this->getResponse());
-		if(isset($response[1])){
-			$result = array_map(function ($item) {
-				return $item[0];
-			}, $response[1]);
+		if($response = $this->getResponse()) {
+			$response = json_decode($response);
+			if(isset($response[1])){
+				$result = array_map(function ($item) {
+					return $item[0];
+				}, $response[1]);
 
-			return $result;
+				return $result;
+			}
 		}
 	}
 
