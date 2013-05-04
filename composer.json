@@ -34,6 +34,9 @@
 	},
 
 	"autoload": {
-		"psr-0": {"Flame": ""}
+		"psr-0": {"Flame": ""},
+        "classmap": [
+            "Flame/Youtube/exceptions.php"
+        ]
 	}
 }
