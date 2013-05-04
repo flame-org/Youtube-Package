@@ -39,4 +39,13 @@ abstract class UrlService extends Object
 	{
 		return new Request($url, $post);
 	}
+
+	/**
+	 * @param null $url
+	 * @return Url
+	 */
+	public function createUrl($url = null)
+	{
+		return new Url($url);
+	}
 }

@@ -29,7 +29,7 @@ class VideoSuggestions extends UrlService
 
 	public function __construct()
 	{
-		$this->urlService = $this->appendDefault(new Url(self::URL), $this->default);
+		$this->urlService = $this->appendDefault($this->createUrl(self::URL), $this->default);
 	}
 
 	/**
