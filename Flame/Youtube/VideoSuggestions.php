@@ -24,21 +24,13 @@ class VideoSuggestions extends UrlService
 		'cp' => 1
 	);
 
-	/** @var \Nette\Http\Url  */
-	private $urlService;
-
-	public function __construct()
-	{
-		$this->urlService = $this->appendDefault($this->createUrl(self::URL), $this->default);
-	}
-
 	/**
 	 * @param $key
 	 * @return $this
 	 */
 	public function setSearchKey($key)
 	{
-		$this->urlService->appendQuery(array('q' => (string)$key));
+		$this->default['q'] = (string) $key;
 		return $this;
 	}
 
@@ -47,7 +39,7 @@ class VideoSuggestions extends UrlService
 	 */
 	public function getUrl()
 	{
-		return (string) $this->urlService;
+		return (string) $this->createUrl(self::URL)->setQuery($this->default);
 	}
 
 	/**

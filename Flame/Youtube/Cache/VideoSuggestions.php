@@ -29,8 +29,6 @@ class VideoSuggestions extends Flame\Youtube\VideoSuggestions implements ICacheS
 	 */
 	public function __construct(CacheHelpers $cacheHelpers)
 	{
-		parent::__construct();
-
 		$this->cacheHelpers = $cacheHelpers;
 		$this->cache = $cacheHelpers->createCache(self::CACHE_NAMESPACE);
 	}

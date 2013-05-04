@@ -13,23 +13,6 @@ use Nette\Object;
 
 abstract class UrlService extends Object
 {
-
-	/**
-	 * @param Url $url
-	 * @param array $default
-	 * @return Url
-	 */
-	public function appendDefault(Url $url, array $default)
-	{
-		if(count($default)){
-			foreach ($default as $k => $default) {
-				$url->appendQuery(array($k => $default));
-			}
-		}
-
-		return $url;
-	}
-
 	/**
 	 * @param $url
 	 * @param array $post

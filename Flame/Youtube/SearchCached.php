@@ -26,8 +26,6 @@ class SearchCached extends Search
 	 */
 	public function __construct(CacheProvider $cacheProvider)
 	{
-		parent::__construct();
-
 		$this->cache = $cacheProvider->createCache(CacheProvider::PERSIST_DIR, self::CACHE_NAMESPACE);
 	}
 

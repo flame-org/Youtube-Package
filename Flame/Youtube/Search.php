@@ -10,6 +10,7 @@
 
 namespace Flame\Youtube;
 
+use Kdyby\Curl\CurlException;
 use Nette\Http\Url;
 
 class Search extends UrlService
@@ -23,16 +24,9 @@ class Search extends UrlService
 		'start-index' => '1',
 		'max-results' => '10',
 		'v' => '2',
-		'strict' => false
+		'strict' => false,
+		'alt' => 'json'
 	);
-
-	/** @var \Nette\Http\Url */
-	protected $urlService;
-
-	public function __construct()
-	{
-		$this->urlService = $this->appendDefault(new Url(self::URL), $this->default);
-	}
 
 	/**
 	 * @param $key
@@ -40,7 +34,7 @@ class Search extends UrlService
 	 */
 	public function setSearchKey($key)
 	{
-		$this->urlService->setQuery(array('q' => (string)$key));
+		$this->default['q'] = (string) $key;
 		return $this;
 	}
 
@@ -50,7 +44,7 @@ class Search extends UrlService
 	 */
 	public function setMaxResults($limit)
 	{
-		$this->urlService->setQuery(array('max-results' => (string) $limit));
+		$this->default['max-results'] = (string) $limit;
 		return $this;
 	}
 
@@ -60,7 +54,7 @@ class Search extends UrlService
 	 */
 	public function setOrderBy($key)
 	{
-		$this->urlService->setQuery(array('orderby' => (string) $key));
+		$this->default['orderby'] = (string) $key;
 		return $this;
 	}
 
@@ -70,7 +64,7 @@ class Search extends UrlService
 	 */
 	public function setStartIndex($index)
 	{
-		$this->urlService->setQuery(array('start-index' => ((int) $index) ? (int) $index : 1));
+		$this->default['start-index']  = ((int) $index) ? (int) $index : 1;
 		return $this;
 	}
 
@@ -79,32 +73,28 @@ class Search extends UrlService
 	 */
 	public function getUrl()
 	{
-		return (string) $this->urlService;
+		return (string) $this->createUrl(self::URL)->setQuery($this->default);
 	}
 
 	/**
-	 * @return \SimpleXMLElement
+	 * @return string
 	 */
 	public function getResponse()
 	{
-		return @file_get_contents($this->getUrl());
+		try {
+			$curl = $this->createCurl($this->getUrl());
+			return $curl->get()->getResponse();
+		}catch (CurlException $ex) {}
 	}
 
 	/**
-	 * @return object
+	 * @return mixed
 	 */
 	public function getResult()
 	{
-		return $this->parseResponse($this->getResponse());
-	}
-
-	/**
-	 * @param $response
-	 * @return object
-	 */
-	protected function parseResponse($response)
-	{
-		return @simplexml_load_string($response);
+		if($response = $this->getResponse()) {
+			return json_decode($response);
+		}
 	}
 
 }
