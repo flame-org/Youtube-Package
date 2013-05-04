@@ -8,10 +8,11 @@
 
 namespace Flame\Youtube\Video;
 
+use Flame\Youtube\UrlService;
 use Nette\Diagnostics\Debugger;
 use Flame\Youtube\DownloaderException;
 
-class DownloaderApi extends \Nette\Object
+class DownloaderApi extends UrlService
 {
 
 	const YTURL = 'http://www.youtube.com/watch?v=';
@@ -105,15 +106,6 @@ class DownloaderApi extends \Nette\Object
 	}
 
 	/**
-	 * @param $url
-	 * @return \Kdyby\Curl\Request
-	 */
-	protected function createCurlService($url)
-	{
-		return new \Kdyby\Curl\Request($url);
-	}
-
-	/**
 	 * @param $videoId
 	 * @return string
 	 * @throws \Flame\Youtube\DownloaderException
@@ -123,15 +115,9 @@ class DownloaderApi extends \Nette\Object
 
 		try {
 
-			Debugger::timer(__METHOD__);
-
-			$conn = $this->createCurlService($this->getVideoUrl($videoId));
+			$conn = $this->createCurl($this->getVideoUrl($videoId));
 			$conn->setUserAgent('Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)');
-			$html = $conn->get()->getResponse();
-
-			Debugger::barDump(Debugger::timer(__METHOD__), __METHOD__);
-
-			return $html;
+			return $conn->get()->getResponse();
 
 		} catch (\Kdyby\Curl\CurlException $ex) {
 			throw new DownloaderException($ex->getMessage());
