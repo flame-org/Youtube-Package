@@ -54,7 +54,8 @@ class VideoSuggestions extends UrlService
 	 */
 	public function getResponse()
 	{
-		return @file_get_contents($this->getUrl());
+		$curl = $this->createCurl($this->getUrl());
+		return $curl->get()->getResponse();
 	}
 
 	/**
