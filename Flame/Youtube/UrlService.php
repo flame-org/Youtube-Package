@@ -7,6 +7,7 @@
  */
 namespace Flame\Youtube;
 
+use Kdyby\Curl\Request;
 use Nette\Http\Url;
 use Nette\Object;
 
@@ -29,4 +30,13 @@ abstract class UrlService extends Object
 		return $url;
 	}
 
+	/**
+	 * @param $url
+	 * @param array $post
+	 * @return Request
+	 */
+	public function createCurl($url, $post = array())
+	{
+		return new Request($url, $post);
+	}
 }
