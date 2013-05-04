@@ -7,6 +7,7 @@
  */
 namespace Flame\Youtube;
 
+use Kdyby\Curl\CurlException;
 use Nette\Http\Url;
 use Nette\Object;
 
@@ -54,8 +55,10 @@ class VideoSuggestions extends UrlService
 	 */
 	public function getResponse()
 	{
-		$curl = $this->createCurl($this->getUrl());
-		return $curl->get()->getResponse();
+		try {
+			$curl = $this->createCurl($this->getUrl());
+			return $curl->get()->getResponse();
+		}catch (CurlException $ex) {}
 	}
 
 	/**
