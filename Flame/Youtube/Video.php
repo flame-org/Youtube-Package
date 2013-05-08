@@ -10,8 +10,12 @@
 
 namespace Flame\Youtube;
 
+use Nette\Utils\Validators;
+
 class Video extends \Nette\Object
 {
+
+	const URL = 'http://www.youtube.com/watch?v=';
 
 	/**
 	 * @var string
@@ -19,11 +23,15 @@ class Video extends \Nette\Object
 	private $url;
 
 	/**
-	 * @param $url
+	 * @param $id
 	 */
-	public function __construct($url)
+	public function __construct($id)
 	{
-		$this->url = $url;
+		if(Validators::isUrl($id)) {
+			$this->url = $id;
+		}else{
+			$this->url = self::URL . $id;
+		}
 	}
 
 	/**
