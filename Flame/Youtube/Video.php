@@ -75,8 +75,9 @@ class Video extends UrlService
 	 */
 	public function getResult()
 	{
-		$response = $this->getResponse();
-		return $response->entry;
+		if($response = $this->getResponse()) {
+			return $response->entry;
+		}
 	}
 
 	/**
