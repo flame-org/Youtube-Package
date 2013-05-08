@@ -88,8 +88,6 @@ class Video extends UrlService
 		$result = $this->getResult();
 		if (isset($result->{'media$group'}->{'media$thumbnail'}[2]->{'url'})) {
 			return $result->{'media$group'}->{'media$thumbnail'}[2]->{'url'};
-		} else {
-			return null;
 		}
 	}
 
@@ -101,8 +99,6 @@ class Video extends UrlService
 		$result = $this->getResult();
 		if (isset($result->{'media$group'}->{'media$thumbnail'}[2]->{'url'})) {
 			return $result->{'media$group'}->{'yt$duration'}->{'seconds'};
-		} else {
-			return null;
 		}
 	}
 
@@ -114,8 +110,6 @@ class Video extends UrlService
 		$result = $this->getResult();
 		if (isset($result->{'title'}->{'$t'})) {
 			return $result->{'title'}->{'$t'};
-		} else {
-			return null;
 		}
 	}
 
