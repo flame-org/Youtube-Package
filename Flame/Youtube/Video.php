@@ -10,9 +10,11 @@
 
 namespace Flame\Youtube;
 
+use Kdyby\Curl\CurlException;
+use Kdyby\Curl\Request;
 use Nette\Utils\Validators;
 
-class Video extends \Nette\Object
+class Video extends UrlService
 {
 
 	const URL = 'http://www.youtube.com/watch?v=';
@@ -47,7 +49,13 @@ class Video extends \Nette\Object
 	public function getResponse()
 	{
 		$url = 'http://gdata.youtube.com/feeds/api/videos/' . $this->getVideoId() . '?v=2&alt=json';
-		return json_decode(file_get_contents($url));
+		$curl = new Request($url);
+		try {
+			$res = $curl->get()->getResponse();
+			if($res) {
+				return json_decode($res);
+			}
+		}catch (CurlException $ex) {}
 	}
 
 	/**
