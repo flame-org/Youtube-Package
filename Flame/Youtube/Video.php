@@ -36,15 +36,6 @@ class Video extends UrlService
 	}
 
 	/**
-	 * @return null|string
-	 */
-	public function getVideoId()
-	{
-		return $this->videoId;
-
-	}
-
-	/**
 	 * @param bool $invalidate
 	 * @return mixed|string
 	 */
@@ -111,6 +102,15 @@ class Video extends UrlService
 		if (isset($result->{'title'}->{'$t'})) {
 			return $result->{'title'}->{'$t'};
 		}
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getId()
+	{
+		return $this->videoId;
+
 	}
 
 	/**
