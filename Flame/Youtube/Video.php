@@ -22,6 +22,9 @@ class Video extends UrlService
 	/** @var  string */
 	private $videoId;
 
+	/** @var  string */
+	private $respose;
+
 	/**
 	 * @param $id
 	 */
@@ -44,18 +47,29 @@ class Video extends UrlService
 	}
 
 	/**
-	 * @return mixed
+	 * @param bool $invalidate
+	 * @return mixed|string
 	 */
-	public function getResponse()
+	public function getResponse($invalidate = false)
 	{
-		$url = 'http://gdata.youtube.com/feeds/api/videos/' . $this->getVideoId() . '?v=2&alt=json';
-		$curl = new Request($url);
-		try {
-			$res = $curl->get()->getResponse();
-			if($res) {
-				return json_decode($res);
-			}
-		}catch (CurlException $ex) {}
+		if($invalidate === true || $this->respose === null) {
+
+			$url = 'http://gdata.youtube.com/feeds/api/videos/' . $this->getVideoId() . '?v=2&alt=json';
+
+			try {
+
+				$curl = new Request($url);
+				$res = $curl->get()->getResponse();
+
+				if($res) {
+					$this->respose = json_decode($res);
+					return $this->respose;
+				}
+
+			}catch (CurlException $ex) {}
+		}else{
+			return $this->respose;
+		}
 	}
 
 	/**
