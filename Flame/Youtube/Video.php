@@ -110,4 +110,12 @@ class Video extends \Nette\Object
 			return self::URL . $this->videoId;
 		}
 	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->videoId;
+	}
 }
