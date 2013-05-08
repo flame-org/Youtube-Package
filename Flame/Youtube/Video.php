@@ -43,7 +43,7 @@ class Video extends UrlService
 	{
 		if($invalidate === true || $this->respose === null) {
 
-			$url = 'http://gdata.youtube.com/feeds/api/videos/' . $this->getVideoId() . '?v=2&alt=json';
+			$url = 'http://gdata.youtube.com/feeds/api/videos/' . $this->getId() . '?v=2&alt=json';
 
 			try {
 
