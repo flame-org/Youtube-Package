@@ -17,8 +17,6 @@ use Nette\Utils\Validators;
 class Video extends UrlService
 {
 
-	const URL = 'http://www.youtube.com/watch?v=';
-
 	/** @var  string */
 	private $videoId;
 
@@ -30,7 +28,11 @@ class Video extends UrlService
 	 */
 	public function __construct($id)
 	{
-		$this->videoId = $id;
+		if(Validators::isUrl($id)) {
+			$this->videoId = Utils::getVideoId($id);
+		}else{
+			$this->videoId = $id;
+		}
 	}
 
 	/**
@@ -38,11 +40,7 @@ class Video extends UrlService
 	 */
 	public function getVideoId()
 	{
-		if(Validators::isUrl($this->videoId)) {
-			return Utils::getVideoId($this->videoId);
-		}else{
-			return $this->videoId;
-		}
+		return $this->videoId;
 
 	}
 
@@ -117,19 +115,6 @@ class Video extends UrlService
 			return $result->{'title'}->{'$t'};
 		} else {
 			return null;
-		}
-	}
-
-
-	/**
-	 * @return string
-	 */
-	public function getVideoUrl()
-	{
-		if(Validators::isUrl($this->videoId)) {
-			return $this->videoId;
-		}else{
-			return self::URL . $this->videoId;
 		}
 	}
 
