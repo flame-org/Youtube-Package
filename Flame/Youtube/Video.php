@@ -17,29 +17,28 @@ class Video extends \Nette\Object
 
 	const URL = 'http://www.youtube.com/watch?v=';
 
-	/**
-	 * @var string
-	 */
-	private $url;
+	/** @var  string */
+	private $videoId;
 
 	/**
 	 * @param $id
 	 */
 	public function __construct($id)
 	{
-		if(Validators::isUrl($id)) {
-			$this->url = $id;
-		}else{
-			$this->url = self::URL . $id;
-		}
+		$this->videoId = $id;
 	}
 
 	/**
-	 * @return null
+	 * @return null|string
 	 */
 	public function getVideoId()
 	{
-		return Utils::getVideoId($this->url);
+		if(Validators::isUrl($this->videoId)) {
+			return Utils::getVideoId($this->videoId);
+		}else{
+			return $this->videoId;
+		}
+
 	}
 
 	/**
@@ -105,6 +104,10 @@ class Video extends \Nette\Object
 	 */
 	public function getVideoUrl()
 	{
-		return $this->url;
+		if(Validators::isUrl($this->videoId)) {
+			return $this->videoId;
+		}else{
+			return self::URL . $this->videoId;
+		}
 	}
 }
