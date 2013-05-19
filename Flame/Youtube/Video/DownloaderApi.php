@@ -74,18 +74,44 @@ class DownloaderApi extends UrlService
 	 */
 	public function getMP4Links($videoId)
 	{
-		//		$typeMap[18] = array("18", "MP4", "Medium Quality - 480x360");
-		//		$typeMap[22] = array("22", "MP4", "High Quality - 1280x720");
-		//		$typeMap[37] = array("37", "MP4", "High Quality - 1920x1080");
-		//		$typeMap[33] = array("38", "MP4", "High Quality - 4096x230");
-
 		$links = array();
-		$indexs = array(18, 22, 37, 33);
 		$allLinks = $this->getLinks($videoId);
+
 		if (count($allLinks)) {
-			foreach ($indexs as $index) {
-				if (isset($allLinks[$index]))
-					$links[] = $allLinks[$index];
+			if(isset($allLinks[18])) {
+				$links[] = array(
+					'url' => $allLinks[18],
+					'format' => 'mp4',
+					'quality' => 'Medium',
+					'size' => '480x360',
+					);
+			}
+
+			if(isset($allLinks[22])) {
+				$links[] = array(
+					'url' => $allLinks[22],
+					'format' => 'mp4',
+					'quality' => 'High',
+					'size' => '1280x720',
+				);
+			}
+
+			if(isset($allLinks[37])) {
+				$links[] = array(
+					'url' => $allLinks[37],
+					'format' => 'mp4',
+					'quality' => 'High',
+					'size' => '1920x1080',
+				);
+			}
+
+			if(isset($allLinks[33])) {
+				$links[] = array(
+					'url' => $allLinks[33],
+					'format' => 'mp4',
+					'quality' => 'High',
+					'size' => '4096x230',
+				);
 			}
 		}
 
