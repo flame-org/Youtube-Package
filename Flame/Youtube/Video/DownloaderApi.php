@@ -29,7 +29,7 @@ class DownloaderApi extends UrlService
 			throw new DownloaderException('No response from Youtube. Try it again.');
 
 		if (strstr($html, 'verify-age-thumb'))
-			throw new DownloaderException("Adult cideo detected");
+			throw new DownloaderException("Adult video detected");
 
 		if (strstr($html, 'das_captcha'))
 			throw new DownloaderException("Captcha found please run on diffrent server");
