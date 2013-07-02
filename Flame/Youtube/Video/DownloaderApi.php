@@ -24,40 +24,29 @@ class DownloaderApi extends UrlService
 	 */
 	public function getLinks($videoId)
 	{
-
-		if (!$html = $this->getResponse($videoId))
+		if (!$html = $this->getResponse((string) $videoId)) {
 			throw new DownloaderException('No response from Youtube. Try it again.');
+		}
 
-		if (strstr($html, 'verify-age-thumb'))
+		if (strstr($html, 'verify-age-thumb')) {
 			throw new DownloaderException("Adult video detected");
+		}
 
-		if (strstr($html, 'das_captcha'))
+		if (strstr($html, 'das_captcha')) {
 			throw new DownloaderException("Captcha found please run on diffrent server");
+		}
 
-		if (!preg_match('/stream_map=(.[^&]*?)&/i', $html, $match))
+		if (!preg_match('/stream_map=(.[^&]*?)&/i', $html, $match)) {
 			throw new DownloaderException("Error during looking for download URL's");
+		}
 
-		if (!preg_match('/stream_map=(.[^&]*?)(?:\\\\|&)/i', $html, $match))
+		if (!preg_match('/stream_map=(.[^&]*?)(?:\\\\|&)/i', $html, $match)) {
 			throw new DownloaderException('Youtube error occured');
+		}
 
 		$fmt_url = urldecode($match[1]);
 		$urls = explode(',', $fmt_url);
-
-		// Diffent types
-		//		$typeMap[13] = array("13", "3GP", "Low Quality - 176x144");
-		//		$typeMap[17] = array("17", "3GP", "Medium Quality - 176x144");
-		//		$typeMap[36] = array("36", "3GP", "High Quality - 320x240");
-		//		$typeMap[5]  = array("5", "FLV", "Low Quality - 400x226");
-		//		$typeMap[6]  = array("6", "FLV", "Medium Quality - 640x360");
-		//		$typeMap[34] = array("34", "FLV", "Medium Quality - 640x360");
-		//		$typeMap[35] = array("35", "FLV", "High Quality - 854x480");
-		//		$typeMap[43] = array("43", "WEBM", "Low Quality - 640x360");
-		//		$typeMap[44] = array("44", "WEBM", "Medium Quality - 854x480");
-		//		$typeMap[45] = array("45", "WEBM", "High Quality - 1280x720");
-
-
 		$foundArray = array();
-
 		foreach ($urls as $url) {
 			if (preg_match('/itag=([0-9]+)/', $url, $tm) && preg_match('/sig=(.*?)&/', $url, $si) && preg_match('/url=(.*?)&/', $url, $um)) {
 				$u = urldecode($um[1]);
@@ -138,13 +127,10 @@ class DownloaderApi extends UrlService
 	 */
 	protected function getResponse($videoId)
 	{
-
 		try {
-
 			$conn = $this->createCurl($this->getVideoUrl($videoId));
 			$conn->setUserAgent('Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)');
 			return $conn->get()->getResponse();
-
 		} catch (\Kdyby\Curl\CurlException $ex) {
 			throw new DownloaderException($ex->getMessage());
 		}
