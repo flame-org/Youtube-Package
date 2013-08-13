@@ -33,5 +33,8 @@ class YoutubeExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('videoSuggestionsCache'))
 			->setClass('Flame\Youtube\Suggestions\VideoSuggestionsCache');
+
+		$builder->addDefinition($this->prefix('videoFeed'))
+			->setClass('Flame\Youtube\Feed\VideoFeed');
 	}
 } 
