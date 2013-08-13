@@ -15,14 +15,12 @@ class Utils extends \Nette\Object
 
 	/**
 	 * @param $url
-	 * @return null
+	 * @return null|string
 	 */
 	public static function getVideoId($url)
 	{
-		$url = new \Nette\Http\Url($url);
-		$query = $url->getQuery();
-		parse_str($query, $parsed);
-		return (isset($parsed['v'])) ? $parsed['v'] : null;
+		preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $url, $matches);
+		return (isset($matches[0])) ? $matches[0] : null;
 	}
 
 }
