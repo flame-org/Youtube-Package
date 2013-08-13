@@ -11,8 +11,17 @@ interface ICacheService
 {
 
 	/**
-	 * @param string $limit
-	 * @return $this
+	 * @return mixed
 	 */
-	public function setExpiration($limit);
+	public function getCache();
+
+	/**
+	 * @return string
+	 */
+	public function getCacheExpiration();
+
+	/**
+	 * @return string
+	 */
+	public function getCacheNamespace();
 }

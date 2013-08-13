@@ -24,5 +24,14 @@ class YoutubeExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('cacheHelpers'))
 			->setClass('Flame\Youtube\Cache\CacheHelpers');
+
+		$builder->addDefinition($this->prefix('urlsProvider'))
+			->setClass('Flame\Youtube\UrlsProvider');
+
+		$builder->addDefinition($this->prefix('videoSuggestions'))
+			->setClass('Flame\Youtube\Suggestions\VideoSuggestions');
+
+		$builder->addDefinition($this->prefix('videoSuggestionsCache'))
+			->setClass('Flame\Youtube\Suggestions\VideoSuggestionsCache');
 	}
 } 

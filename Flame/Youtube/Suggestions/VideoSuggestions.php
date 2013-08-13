@@ -5,18 +5,17 @@
  * @author: Jiří Šifalda <sifalda.jiri@gmail.com>
  * @date: 04.05.13
  */
-namespace Flame\Youtube;
+namespace Flame\Youtube\Suggestions;
 
+use Flame\Youtube\UrlsProvider;
 use Kdyby\Curl\CurlException;
 use Nette\Http\Url;
 use Nette\Object;
 use Flame\Youtube\Factories\CurlFactory;
 use Flame\Youtube\Factories\UrlFactory;
 
-class VideoSuggestions extends Object
+class VideoSuggestions extends Object implements IVideoSuggestions
 {
-
-	const URL = 'http://suggestqueries.google.com/complete/search';
 
 	/** @var array  */
 	private $default = array(
@@ -27,20 +26,25 @@ class VideoSuggestions extends Object
 		'cp' => 1
 	);
 
-	/** @var  UrlFactory */
+	/** @var \Flame\Youtube\Factories\UrlFactory  */
 	private $urlFactory;
 
-	/** @var  CurlFactory */
+	/** @var \Flame\Youtube\Factories\CurlFactory  */
 	private $curlFactory;
+
+	/** @var \Flame\Youtube\UrlsProvider  */
+	private $urlsProvider;
 
 	/**
 	 * @param CurlFactory $curlFactory
 	 * @param UrlFactory $urlFactory
+	 * @param UrlsProvider $urlsProvider
 	 */
-	public function __construct(CurlFactory $curlFactory, UrlFactory $urlFactory)
+	public function __construct(CurlFactory $curlFactory, UrlFactory $urlFactory, UrlsProvider $urlsProvider)
 	{
 		$this->curlFactory = $curlFactory;
 		$this->urlFactory = $urlFactory;
+		$this->urlsProvider = $urlsProvider;
 	}
 
 	/**
@@ -59,37 +63,38 @@ class VideoSuggestions extends Object
 	public function getUrl()
 	{
 		return (string) $this->urlFactory
-			->setUrl(self::URL)
+			->setUrl($this->urlsProvider->getVideoSuggestionsUrl())
 			->create()
 			->setQuery($this->default);
 	}
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
-	public function getResponse()
+	public function getApiResponse()
 	{
 		try {
-			$curl = $this->curlFactory->create($this->getUrl());
-			return $curl->get()->getResponse();
+			return $this->curlFactory->create($this->getUrl())->get()->getResponse();
 		}catch (CurlException $ex) {}
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getResult()
+	public function getApiResult()
 	{
-		if($response = $this->getResponse()) {
+		if($response = $this->getApiResponse()) {
 			$response = json_decode($response);
 			if(isset($response[1])){
 				$result = array_map(function ($item) {
 					return $item[0];
-				}, $response[1]);
+				}, (array) $response[1]);
 
 				return $result;
 			}
 		}
+
+		return array();
 	}
 
 
