@@ -9,6 +9,7 @@
 namespace Flame\Youtube\Video;
 
 use Flame\Caching\CacheProvider;
+use Flame\Youtube\Factories\CurlFactory;
 
 class DownloaderApiCached extends DownloaderApi
 {
@@ -22,10 +23,13 @@ class DownloaderApiCached extends DownloaderApi
 	private $cache;
 
 	/**
-	 * @param \Flame\Caching\CacheProvider $cacheProvider
+	 * @param CurlFactory $curlFactory
+	 * @param CacheProvider $cacheProvider
 	 */
-	public function __construct(CacheProvider $cacheProvider)
+	public function __construct(CurlFactory $curlFactory, CacheProvider $cacheProvider)
 	{
+		parent::__construct($curlFactory);
+
 		$this->cache = $cacheProvider->createCache(CacheProvider::PERSIST_DIR, self::CACHE_NAMESPACE);
 	}
 

@@ -12,9 +12,10 @@ namespace Flame\Youtube;
 
 use Kdyby\Curl\CurlException;
 use Kdyby\Curl\Request;
+use Nette\Object;
 use Nette\Utils\Validators;
 
-class Video extends UrlService
+class Video extends Object
 {
 
 	/** @var  string */

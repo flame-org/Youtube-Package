@@ -11,9 +11,11 @@
 namespace Flame\Youtube;
 
 use Kdyby\Curl\CurlException;
-use Nette\Http\Url;
+use Nette\Object;
+use Flame\Youtube\Factories\UrlFactory;
+use Flame\Youtube\Factories\CurlFactory;
 
-class Search extends UrlService
+class Search extends Object
 {
 
 	const URL = 'https://gdata.youtube.com/feeds/api/videos';
@@ -27,6 +29,23 @@ class Search extends UrlService
 		'strict' => false,
 		'alt' => 'json'
 	);
+
+	/** @var  UrlFactory */
+	private $urlFactory;
+
+	/** @var  CurlFactory */
+	private $curlFactory;
+
+	/**
+	 * @param CurlFactory $curlFactory
+	 * @param UrlFactory $urlFactory
+	 */
+	public function __construct(CurlFactory $curlFactory, UrlFactory $urlFactory)
+	{
+		$this->curlFactory = $curlFactory;
+		$this->urlFactory = $urlFactory;
+	}
+
 
 	/**
 	 * @param $key
@@ -73,17 +92,22 @@ class Search extends UrlService
 	 */
 	public function getUrl()
 	{
-		return (string) $this->createUrl(self::URL)->setQuery($this->default);
+		return (string) $this->urlFactory
+			->setUrl(self::URL)
+			->create()
+			->setQuery($this->default);
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getResponse()
 	{
 		try {
-			$curl = $this->createCurl($this->getUrl());
-			return $curl->get()->getResponse();
+			return $this->curlFactory
+				->create($this->getUrl())
+				->get()
+				->getResponse();
 		}catch (CurlException $ex) {}
 	}
 

@@ -9,6 +9,8 @@
 namespace Flame\Youtube;
 
 use Flame\Caching\CacheProvider;
+use Flame\Youtube\Factories\CurlFactory;
+use Flame\Youtube\Factories\UrlFactory;
 
 class SearchCached extends Search
 {
@@ -22,10 +24,14 @@ class SearchCached extends Search
 	private $cache;
 
 	/**
-	 * @param \Flame\Caching\CacheProvider $cacheProvider
+	 * @param CurlFactory $curlFactory
+	 * @param UrlFactory $urlFactory
+	 * @param CacheProvider $cacheProvider
 	 */
-	public function __construct(CacheProvider $cacheProvider)
+	public function __construct(CurlFactory $curlFactory, UrlFactory $urlFactory, CacheProvider $cacheProvider)
 	{
+		parent::__construct($curlFactory, $urlFactory);
+
 		$this->cache = $cacheProvider->createCache(CacheProvider::PERSIST_DIR, self::CACHE_NAMESPACE);
 	}
 

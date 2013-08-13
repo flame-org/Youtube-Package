@@ -10,9 +10,12 @@ namespace Flame\Youtube;
 use Kdyby\Curl\CurlException;
 use Nette\Http\Url;
 use Nette\Object;
+use Flame\Youtube\Factories\CurlFactory;
+use Flame\Youtube\Factories\UrlFactory;
 
-class VideoSuggestions extends UrlService
+class VideoSuggestions extends Object
 {
+
 	const URL = 'http://suggestqueries.google.com/complete/search';
 
 	/** @var array  */
@@ -23,6 +26,22 @@ class VideoSuggestions extends UrlService
 		'hjson' => "t",
 		'cp' => 1
 	);
+
+	/** @var  UrlFactory */
+	private $urlFactory;
+
+	/** @var  CurlFactory */
+	private $curlFactory;
+
+	/**
+	 * @param CurlFactory $curlFactory
+	 * @param UrlFactory $urlFactory
+	 */
+	public function __construct(CurlFactory $curlFactory, UrlFactory $urlFactory)
+	{
+		$this->curlFactory = $curlFactory;
+		$this->urlFactory = $urlFactory;
+	}
 
 	/**
 	 * @param $key
@@ -39,7 +58,10 @@ class VideoSuggestions extends UrlService
 	 */
 	public function getUrl()
 	{
-		return (string) $this->createUrl(self::URL)->setQuery($this->default);
+		return (string) $this->urlFactory
+			->setUrl(self::URL)
+			->create()
+			->setQuery($this->default);
 	}
 
 	/**
@@ -48,7 +70,7 @@ class VideoSuggestions extends UrlService
 	public function getResponse()
 	{
 		try {
-			$curl = $this->createCurl($this->getUrl());
+			$curl = $this->curlFactory->create($this->getUrl());
 			return $curl->get()->getResponse();
 		}catch (CurlException $ex) {}
 	}

@@ -7,10 +7,12 @@
  */
 namespace Flame\Youtube\Cache;
 
-use Flame;
 use Nette\Caching\Cache;
+use Flame\Youtube\Factories\CurlFactory;
+use Flame\Youtube\Factories\UrlFactory;
+use Flame\Youtube;
 
-class VideoSuggestions extends Flame\Youtube\VideoSuggestions implements ICacheService
+class VideoSuggestions extends Youtube\VideoSuggestions implements ICacheService
 {
 
 	const CACHE_NAMESPACE = 'Youtube.VideoSuggestions';
@@ -25,10 +27,14 @@ class VideoSuggestions extends Flame\Youtube\VideoSuggestions implements ICacheS
 	private $cacheExpiration = '+ 34 hours';
 
 	/**
+	 * @param CurlFactory $curlFactory
+	 * @param UrlFactory $urlFactory
 	 * @param CacheHelpers $cacheHelpers
 	 */
-	public function __construct(CacheHelpers $cacheHelpers)
+	public function __construct(CurlFactory $curlFactory, UrlFactory $urlFactory, CacheHelpers $cacheHelpers)
 	{
+		parent::__construct($curlFactory, $urlFactory);
+
 		$this->cacheHelpers = $cacheHelpers;
 		$this->cache = $cacheHelpers->createCache(self::CACHE_NAMESPACE);
 	}
