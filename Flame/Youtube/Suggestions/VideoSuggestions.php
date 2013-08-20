@@ -85,12 +85,20 @@ class VideoSuggestions extends Object implements IVideoSuggestions
 	{
 		if($response = $this->getApiResponse()) {
 			$response = json_decode($response);
-			if(isset($response[1])){
-				$result = array_map(function ($item) {
-					return $item[0];
-				}, (array) $response[1]);
 
-				return $result;
+			if(isset($response[1])){
+				$response = (array) $response[1];
+				if(count($response)) {
+					foreach ($response as $k => $item) {
+						if(isset($item[0])) {
+							$response[$k] = $item[0];
+						} else {
+							unset($response[$k]);
+						}
+					}
+
+					return $response;
+				}
 			}
 		}
 
